@@ -1,6 +1,6 @@
 # GitHub Copilot Changelog
 
-## [Fix copilot quota 100% cap] - {PR_MERGE_DATE}
+## [Fix copilot quota 100% cap] - 2026-02-24
 
 - Fix Copilot quota cap at 100% when user has used all of their quota and have the "Allow usage beyond quota" setting enabled
 
