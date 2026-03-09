@@ -1,8 +1,8 @@
 import { Detail } from "@raycast/api";
 import { showFailureToast } from "@raycast/utils";
 import { showError } from "./components/showError";
-import { getExportFilePath } from "./constants/ente";
-import { checkEnteBinary, createEntePath, exportEnteAuthSecrets, getEnteExportDirPath } from "./helpers/ente";
+import { DEFAULT_EXPORT_DIR_PATH, getExportFilePath } from "./constants/ente";
+import { checkEnteBinary, createEntePath, exportEnteAuthSecrets } from "./helpers/ente";
 import { getSecrets, parseSecrets } from "./helpers/secrets";
 
 export default function Command() {
@@ -11,7 +11,7 @@ export default function Command() {
 	if (!enteBinaryExists) {
 		return showError();
 	}
-	const exportDirPath = getEnteExportDirPath();
+	const exportDirPath = DEFAULT_EXPORT_DIR_PATH();
 	const exportFilePath = getExportFilePath(exportDirPath);
 
 	try {

@@ -1,12 +1,6 @@
 import { getPreferenceValues, showToast, Toast } from "@raycast/api";
-import { getExportFilePath } from "./constants/ente";
-import {
-	checkEnteBinary,
-	createEntePath,
-	deleteEnteExport,
-	exportEnteAuthSecrets,
-	getEnteExportDirPath,
-} from "./helpers/ente";
+import { DEFAULT_EXPORT_DIR_PATH, getExportFilePath } from "./constants/ente";
+import { checkEnteBinary, createEntePath, deleteEnteExport, exportEnteAuthSecrets } from "./helpers/ente";
 import { getSecrets, parseSecrets, storeSecrets } from "./helpers/secrets";
 
 export default async function Command() {
@@ -18,7 +12,7 @@ export default async function Command() {
 		toast.message = "Please install the Ente binary.";
 		return;
 	}
-	const exportDirPath = getEnteExportDirPath();
+	const exportDirPath = DEFAULT_EXPORT_DIR_PATH();
 	const exportFilePath = getExportFilePath(exportDirPath);
 
 	try {

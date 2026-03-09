@@ -20,6 +20,7 @@ const runEnteCommand = (...args: string[]): string =>
 	});
 
 type EnteAccount = {
+	email?: string;
 	app?: string;
 	exportDir?: string;
 };
@@ -49,6 +50,9 @@ const parseEnteAccounts = (accountList: string): EnteAccount[] => {
 		}
 
 		const [, key, value] = match;
+		if (key === "Email") {
+			currentAccount.email = value.trim();
+		}
 		if (key === "App") {
 			currentAccount.app = value.trim().toLowerCase();
 		}
@@ -85,21 +89,45 @@ export const checkEnteBinary = (): boolean => {
 	return false;
 };
 
-export const getEnteExportDirPath = (): string => {
-	try {
-		const accountList = runEnteCommand("account", "list");
-		const accounts = parseEnteAccounts(accountList);
-		const authAccount = accounts.find((account) => account.app === "auth" && account.exportDir);
-		const fallbackAccount = accounts.find((account) => account.exportDir);
-
-		return authAccount?.exportDir || fallbackAccount?.exportDir || DEFAULT_EXPORT_DIR_PATH();
-	} catch {
-		return DEFAULT_EXPORT_DIR_PATH();
-	}
+const normalizeDirectoryPath = (directoryPath: string): string => {
+	const normalizedPath = normalizeConfiguredPath(directoryPath);
+	return process.platform === "win32" ? normalizedPath.toLowerCase() : normalizedPath;
 };
 
-export const exportEnteAuthSecrets = (exportDirPath: string = getEnteExportDirPath()): boolean => {
+export const syncEnteExportDirValue = (expectedExportDir: string = DEFAULT_EXPORT_DIR_PATH()): string => {
+	const accountList = runEnteCommand("account", "list");
+	const accounts = parseEnteAccounts(accountList);
+	const authAccount = accounts.find((account) => account.app === "auth");
+
+	if (!authAccount?.email) {
+		throw new Error(
+			"Auth account not found in Ente CLI. Please run `ente account add` and choose the auth app."
+		);
+	}
+
+	if (
+		authAccount.exportDir &&
+		normalizeDirectoryPath(authAccount.exportDir) === normalizeDirectoryPath(expectedExportDir)
+	) {
+		return expectedExportDir;
+	}
+
+	runEnteCommand(
+		"account",
+		"update",
+		"--app",
+		"auth",
+		"--email",
+		authAccount.email,
+		"--dir",
+		expectedExportDir
+	);
+	return expectedExportDir;
+};
+
+export const exportEnteAuthSecrets = (exportDirPath: string = DEFAULT_EXPORT_DIR_PATH()): boolean => {
 	try {
+		syncEnteExportDirValue(exportDirPath);
 		runEnteCommand("export");
 		console.log("Export to", getExportFilePath(exportDirPath));
 	} catch {
@@ -109,7 +137,7 @@ export const exportEnteAuthSecrets = (exportDirPath: string = getEnteExportDirPa
 };
 
 export const deleteEnteExport = (
-	exportFilePath: string = getExportFilePath(getEnteExportDirPath())
+	exportFilePath: string = getExportFilePath(DEFAULT_EXPORT_DIR_PATH())
 ): boolean => {
 	try {
 		fse.removeSync(exportFilePath);
