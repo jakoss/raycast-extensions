@@ -1,6 +1,6 @@
 # Ente Auth Changelog
 
-## [Fix spaces in export path] - {PR_MERGE_DATE}
+## [Fix spaces in export path] - 2026-03-09
 
 - Fixed issue with spaces in export path causing export to fail
 
