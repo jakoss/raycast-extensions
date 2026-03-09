@@ -1,5 +1,9 @@
 # Ente Auth Changelog
 
+## [Fix spaces in export path] - {PR_MERGE_DATE}
+
+- Fixed issue with spaces in export path causing export to fail
+
 ## [Fix import edge cases] - 2026-03-05
 
 - Fixed cases when ente auth added dashes and plus signs into secret (so far it wasn't parsing correctly)
