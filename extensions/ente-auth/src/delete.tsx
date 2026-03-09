@@ -1,5 +1,6 @@
 import { confirmAlert } from "@raycast/api";
-import { deleteEnteExport } from "./helpers/ente";
+import { getExportFilePath } from "./constants/ente";
+import { deleteEnteExport, getEnteExportDirPath } from "./helpers/ente";
 
 export default async function Command() {
 	let deleteFile = false;
@@ -11,6 +12,6 @@ export default async function Command() {
 	}
 
 	if (deleteFile) {
-		deleteEnteExport();
+		deleteEnteExport(getExportFilePath(getEnteExportDirPath()));
 	}
 }
