@@ -12,6 +12,6 @@ export default async function Command() {
 	}
 
 	if (deleteFile) {
-		deleteEnteExport(getExportFilePath(DEFAULT_EXPORT_DIR_PATH()));
+		await deleteEnteExport(getExportFilePath(DEFAULT_EXPORT_DIR_PATH()));
 	}
 }

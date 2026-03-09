@@ -1,4 +1,4 @@
-import { getPreferenceValues } from "@raycast/api";
+import { getPreferenceValues, trash } from "@raycast/api";
 import { execFileSync } from "child_process";
 import fse from "fs-extra";
 import { DEFAULT_EXPORT_DIR_PATH, getExportFilePath } from "../constants/ente";
@@ -136,11 +136,11 @@ export const exportEnteAuthSecrets = (exportDirPath: string = DEFAULT_EXPORT_DIR
 	return true;
 };
 
-export const deleteEnteExport = (
+export const deleteEnteExport = async (
 	exportFilePath: string = getExportFilePath(DEFAULT_EXPORT_DIR_PATH())
-): boolean => {
+): Promise<boolean> => {
 	try {
-		fse.removeSync(exportFilePath);
+		await trash(exportFilePath);
 	} catch (error) {
 		console.error("Error during removal:", error);
 		return false;

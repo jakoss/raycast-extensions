@@ -35,6 +35,6 @@ export default async function Command() {
 		toast.message = error instanceof Error ? error.message : "Unknown error";
 	}
 	if (getPreferenceValues<Preferences>().deleteExport === true) {
-		deleteEnteExport(exportFilePath);
+		await deleteEnteExport(exportFilePath);
 	}
 }
