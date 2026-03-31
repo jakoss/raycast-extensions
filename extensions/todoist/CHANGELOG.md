@@ -1,6 +1,6 @@
 # Todoist Changelog
 
-## [Show deadline as how many days remains] - {PR_MERGE_DATE}
+## [Show deadline as how many days remains] - 2026-03-31
 - The task deadlines are shown as "in X days" instead of a specific date, like the todoist app.
 
 ## [Fix reminders and Create Task NLP parsing] - 2026-03-06
